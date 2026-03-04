@@ -1,0 +1,19 @@
+# Core dependencies
+psycopg2-binary
+pgvector
+sqlalchemy
+pandas
+numpy
+
+# AI/ML dependencies
+torch
+torchvision
+transformers
+sentence-transformers
+Pillow
+
+# Utilities
+python-dotenv
+tqdm
+tabulate
+matplotlib
