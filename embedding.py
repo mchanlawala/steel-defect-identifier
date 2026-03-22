@@ -9,7 +9,7 @@ model = models.resnet50(weights=models.ResNet50_Weights.DEFAULT)
 model = torch.nn.Sequential(*(list(model.children())[:-1]))  # Remove last layer
 model.eval()
 
-# Image transform
+# Image transform with normalization
 transform = transforms.Compose([
     transforms.Resize((224, 224)),
     transforms.ToTensor(),
@@ -20,11 +20,25 @@ transform = transforms.Compose([
 ])
 
 def extract_embedding(image_path):
-    image = Image.open(image_path).convert("RGB")
-    image = transform(image).unsqueeze(0)
+    """
+    Extract embedding from image and return as numpy array
+    """
+    try:
+        image = Image.open(image_path).convert("RGB")
+        image = transform(image).unsqueeze(0)
 
-    with torch.no_grad():
-        embedding = model(image)
+        with torch.no_grad():
+            embedding = model(image)
 
-    embedding = embedding.squeeze().numpy()
-    return embedding
+        # Convert to numpy and flatten
+        embedding = embedding.squeeze().numpy()
+
+        # Ensure it's float32 (FAISS requires this)
+        embedding = embedding.astype(np.float32)
+
+        return embedding
+
+    except Exception as e:
+        print(f"Error extracting embedding from {image_path}: {e}")
+        # Return zero vector as fallback
+        return np.zeros(2048, dtype=np.float32)

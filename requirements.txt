@@ -17,3 +17,15 @@ python-dotenv
 tqdm
 tabulate
 matplotlib
+
+fastapi
+uvicorn
+python-multipart
+ollama
+torch
+torchvision
+Pillow
+numpy
+faiss-cpu
+sqlalchemy
+psycopg2-binary
